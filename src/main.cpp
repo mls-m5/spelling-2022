@@ -4,15 +4,24 @@
 #include "wordlist.h"
 #include <iostream>
 
+struct File {
+    std::vector<std::shared_ptr<Token>> tokens;
+};
+
 int main(int argc, char **argv) {
     auto args = std::vector<std::filesystem::path>(argv + 1, argv + argc);
     auto dir = args.at(0);
     auto database = Database{};
-    auto wordList = WordList{"spell/dict.txt"};
-    auto corrections = Corrections{"spell/sv.corrections.txt"};
+    auto wordList = WordList{"spell/sv.dict.txt"};
+    wordList.loadWords("spell/names.txt");
     wordList.loadWords("spell/sv.utf-8.add");
 
+    auto corrections = Corrections{"spell/sv.corrections.txt"};
+    auto nameCorrections = Corrections{"spell/names.txt", true};
+
     auto verbose = false;
+
+    auto files = std::vector<File>{};
 
     for (const auto &file :
          std::filesystem::recursive_directory_iterator{dir}) {
@@ -47,16 +56,31 @@ int main(int argc, char **argv) {
 
             std::cout << "\n";
         }
+
+        files.push_back({std::move(tokens)});
     }
 
     std::cout << "misspelled words:\n";
 
-    for (auto &word : database.getTokens(
-             [&](auto &&word) { return !wordList.exists(word); })) {
+    auto missSpelled =
+        database.getTokens([&](auto &&word) { return !wordList.exists(word); });
+
+    for (auto &word : missSpelled) {
         std::cout << *word;
+        if (auto correction = nameCorrections.correct(*word);
+            !correction.empty()) {
+            std::cout << " (name) -> '" << correction << "'";
+        }
         if (auto correction = corrections.correct(*word); !correction.empty()) {
             std::cout << " -> '" << correction << "'";
         }
         std::cout << "\t" << word.use_count() << "\n";
+    }
+
+    std::cout << "common missspellings\n";
+    for (auto &word : missSpelled) {
+        if (word.use_count() > 3) {
+            std::cout << *word << "\t" << word.use_count() << "\n";
+        }
     }
 }

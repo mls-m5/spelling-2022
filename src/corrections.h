@@ -6,7 +6,7 @@
 
 class Corrections {
 public:
-    Corrections(std::filesystem::path path);
+    Corrections(std::filesystem::path path, bool isNames = false);
 
     std::string correct(const std::string str);
 
