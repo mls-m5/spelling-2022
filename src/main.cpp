@@ -7,6 +7,7 @@ int main(int argc, char **argv) {
     auto args = std::vector<std::filesystem::path>(argv + 1, argv + argc);
     auto dir = args.at(0);
     auto database = Database{};
+    auto wordList = WordList{"dict.txt"};
 
     for (const auto &file :
          std::filesystem::recursive_directory_iterator{dir}) {
@@ -17,6 +18,12 @@ int main(int argc, char **argv) {
 
         for (const auto &token : tokens) {
             std::cout << "\t'" << *token << "'\t - " << token.use_count();
+
+            if (isAlphaNoSpace(token->front())) {
+                if (!wordList.exists(*token)) {
+                    std::cout << " - not in dictionary";
+                }
+            }
 
             std::cout << "\n";
         }

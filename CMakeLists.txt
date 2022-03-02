@@ -7,6 +7,7 @@ add_executable(
     spelling
     src/main.cpp
     src/tokenizer.cpp
+    src/wordlist.cpp
     )
 
 file(COPY data/demo.txt DESTINATION data)

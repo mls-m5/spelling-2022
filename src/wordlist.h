@@ -6,16 +6,16 @@
 
 // Verified words
 struct WordList {
-    WordList(std::filesystem::path path) {}
+    WordList(std::filesystem::path path);
 
     bool exists(const std::string &word) {
-        return _map.find(word) != _map.end();
+        return _words.find(word) != _words.end();
     }
 
     void add(std::string word) {
-        _map.insert(word);
+        _words.insert(word);
     }
 
 private:
-    std::unordered_set<std::string> _map;
+    std::unordered_set<std::string> _words;
 };

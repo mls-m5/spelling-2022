@@ -59,6 +59,9 @@ struct Database {
         auto tokens = std::vector<std::shared_ptr<Token>>{};
 
         for (const auto &str : strings) {
+            if (str.empty()) {
+                continue;
+            }
             tokens.push_back(createPointer(str));
         }
 
