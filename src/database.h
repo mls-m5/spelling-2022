@@ -1,6 +1,7 @@
 #pragma once
 
 #include "alpha.h"
+#include <functional>
 #include <memory>
 #include <string>
 #include <unordered_map>
@@ -53,6 +54,19 @@ struct Database {
         //        return std::make_shared<Token>(Token::Space,
         //        std::string{word});
         return std::make_shared<Token>(word);
+    }
+
+    // Find token by criteria
+    // For example find misspelled words
+    std::vector<std::shared_ptr<Token>> getTokens(
+        std::function<bool(const Token &)> match) {
+        auto words = std::vector<std::shared_ptr<Token>>{};
+        for (auto pair : _words) {
+            if (match(*pair.second)) {
+                words.push_back(pair.second);
+            }
+        }
+        return words;
     }
 
     auto createTokens(std::vector<std::string> strings) {

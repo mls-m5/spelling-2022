@@ -33,6 +33,13 @@ inline bool isSwedishSpecialChar(char c) {
     return false;
 }
 
+inline std::string toLower(std::string str) {
+    for (auto &c : str) {
+        c = std::tolower(c, impl::locale);
+    }
+    return str;
+}
+
 inline bool isAlphaNoSpace(char c) {
     return (std::isalpha(c, impl::locale) || isUtfTail(c) ||
             isSwedishSpecialChar(c)) &&
