@@ -1,10 +1,22 @@
 Spelling
 ========
 
+## Dependencies
+
+aspell, for using aspell wordlist
+
+https://superuser.com/questions/137957/how-to-convert-aspell-dictionary-to-simple-list-of-words
+
+```bash
+aspell -d sv dump master | aspell -l sv expand > dict.txt
+```
 
 
-Wordlist location for words:
+## Wordlsts
 
-/var/lib/dictionaries-common/wordlist/wswedish
+### from ispell
+https://sv.speling.org/installation/ispell.shtml
 
-(in package wswedish)
+### from aspell
+Se även denna
+https://superuser.com/questions/137957/how-to-convert-aspell-dictionary-to-simple-list-of-words

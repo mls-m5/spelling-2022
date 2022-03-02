@@ -1,4 +1,5 @@
 #include "tokenizer.h"
+#include "alpha.h"
 #include <fstream>
 
 std::vector<std::string> tokenize(std::filesystem::path path) {
@@ -8,7 +9,7 @@ std::vector<std::string> tokenize(std::filesystem::path path) {
     bool isWord = false;
 
     for (char c = 0; file.read(&c, 1);) {
-        if (auto a = isalpha(c) && !isspace(c); a != isWord || words.empty()) {
+        if (auto a = isAlphaNoSpace(c); a != isWord || words.empty()) {
             isWord = a;
             words.emplace_back();
         }
