@@ -8,9 +8,11 @@ add_executable(
     src/main.cpp
     src/tokenizer.cpp
     src/wordlist.cpp
+    src/corrections.cpp
     )
 
 file(COPY data/demo.txt DESTINATION data)
+file(COPY spell DESTINATION .)
 
 target_compile_features(spelling PRIVATE cxx_std_17)
 

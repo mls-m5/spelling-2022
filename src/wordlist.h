@@ -11,6 +11,8 @@
 struct WordList {
     WordList(std::filesystem::path path);
 
+    void loadWords(std::filesystem::path path);
+
     bool exists(const std::string &word, bool caseSensitive = false) {
         if (caseSensitive) {
             return _words.find(word) != _words.end();

@@ -1,3 +1,4 @@
+#include "corrections.h"
 #include "database.h"
 #include "tokenizer.h"
 #include "wordlist.h"
@@ -7,7 +8,9 @@ int main(int argc, char **argv) {
     auto args = std::vector<std::filesystem::path>(argv + 1, argv + argc);
     auto dir = args.at(0);
     auto database = Database{};
-    auto wordList = WordList{"dict.txt"};
+    auto wordList = WordList{"spell/dict.txt"};
+    auto corrections = Corrections{"spell/sv.corrections.txt"};
+    wordList.loadWords("spell/sv.utf-8.add");
 
     auto verbose = false;
 
@@ -50,6 +53,10 @@ int main(int argc, char **argv) {
 
     for (auto &word : database.getTokens(
              [&](auto &&word) { return !wordList.exists(word); })) {
-        std::cout << *word << "\t" << word.use_count() << "\n";
+        std::cout << *word;
+        if (auto correction = corrections.correct(*word); !correction.empty()) {
+            std::cout << " -> '" << correction << "'";
+        }
+        std::cout << "\t" << word.use_count() << "\n";
     }
 }

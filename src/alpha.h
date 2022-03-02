@@ -2,6 +2,7 @@
 
 #include <array>
 #include <locale>
+#include <optional>
 
 namespace impl {
 
@@ -44,4 +45,27 @@ inline bool isAlphaNoSpace(char c) {
     return (std::isalpha(c, impl::locale) || isUtfTail(c) ||
             isSwedishSpecialChar(c)) &&
            !std::isspace(c);
+}
+
+inline std::string trim(std::string str) {
+    while (!str.empty() && std::isspace(str.front())) {
+        str.erase(0, 1);
+    }
+
+    while (!str.empty() && std::isspace(str.back())) {
+        str.pop_back();
+    }
+
+    return str;
+}
+
+inline std::optional<std::pair<std::string, std::string>> split(
+    std::string str, std::string separator) {
+    auto f = str.find(separator);
+
+    if (f == std::string::npos) {
+        return std::nullopt;
+    }
+
+    return std::pair{str.substr(0, f), str.substr(f + separator.size())};
 }
